@@ -6,6 +6,7 @@ public class movement : MonoBehaviour
 {
 
     Rigidbody rb;
+    AudioSource aus;
     [SerializeField] float force_magnitude = 1000;
     [SerializeField] float force_rotation = 1000;
 
@@ -13,6 +14,7 @@ public class movement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        aus = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -24,6 +26,7 @@ public class movement : MonoBehaviour
     void process_input() {
         if(Input.GetKey(KeyCode.Space)) {
             Debug.Log("pressed space");
+            play_sound();
             rb.AddRelativeForce(Vector3.up * force_magnitude * Time.deltaTime);
         } else if (Input.GetKey(KeyCode.A)) {
             process_rotation(force_rotation);
@@ -33,7 +36,9 @@ public class movement : MonoBehaviour
             Debug.Log("pressed W");
         } else if (Input.GetKey(KeyCode.S)) {
             Debug.Log("pressed S");
-        } 
+        } else {
+            stop_sound();
+        }
         
         // add a comment
     }
@@ -43,6 +48,18 @@ public class movement : MonoBehaviour
         transform.Rotate(Vector3.forward * force * Time.deltaTime);
         rb.freezeRotation = false;
 
+    }
+
+    private void play_sound() {
+        if (!aus.isPlaying) {
+            aus.Play();
+        }
+    }
+
+    private void stop_sound() {
+        if (aus.isPlaying) {
+            aus.Stop();
+        }
     }
 
 }
